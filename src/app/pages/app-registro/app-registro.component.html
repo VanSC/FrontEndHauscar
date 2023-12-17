@@ -1,0 +1,27 @@
+<mat-card-header class="">
+    <mat-card-title class="m-b-0">Registro de nuevo vehículo entrante:</mat-card-title>
+</mat-card-header><br>
+<hr>
+<div class="justify-content-center align-items-center boxed-auth">
+    <mat-card-content class="p-15">
+        <form [formGroup]="registroForm" (ngSubmit)="agregarRegistro()" class="m-t-10" enctype="multipart/form-data">
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-16 d-block">Placa del vehículo:</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+                <input matInput id="placa" formControlName="placa" placeholder="AJA-786" />
+            </mat-form-field>
+
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-16 d-block">Imagen de la carga útil:</mat-label>
+            <div class="cloud-upload-container text-center">
+                <input type="file" id="imagenPath" class="cloud-upload-input" formControlName="imagenPath"/>
+                <label for="imagenPath" class="cloud-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i> Subir Imagen
+                </label>
+            </div><br><br>
+
+            <button mat-flat-button color="primary" class="w-100" type="submit">
+                Registrar
+            </button><br>
+        </form>
+    </mat-card-content>
+</div><br>
+<hr>
