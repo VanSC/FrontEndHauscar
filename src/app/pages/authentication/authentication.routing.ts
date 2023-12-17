@@ -7,7 +7,7 @@ export const AuthenticationRoutes: Routes = [
     path: '',
     children: [
       {
-        path: 'login',
+        path: '',
         component: AppSideLoginComponent,
       },
     ],

@@ -10,14 +10,27 @@ import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estad
 
 const routes: Routes = [
   {
-    path: '',
-    component: FullComponent,
+    path: 'login',
+    component: BlankComponent,
     children: [
       {
-        path: '',
-        redirectTo: '/dashboard',
-        pathMatch: 'full',
+        path: 'authentication',
+        loadChildren: () =>
+          import('./pages/authentication/authentication.module').then(
+            (m) => m.AuthenticationModule
+          ),
       },
+    ],
+  },
+  {
+    path: 'page',
+    component: FullComponent,
+    children: [
+      // {
+      //   path: '',
+      //   redirectTo: '/dashboard',
+      //   pathMatch: 'full',
+      // },
       {
         path: 'dashboard',
         loadChildren: () =>
@@ -50,20 +63,6 @@ const routes: Routes = [
       {
         path: "estadisticas", component: EstadisticaRegistroComponent
       }
-      
-    ],
-  },
-  {
-    path: '',
-    component: BlankComponent,
-    children: [
-      {
-        path: 'authentication',
-        loadChildren: () =>
-          import('./pages/authentication/authentication.module').then(
-            (m) => m.AuthenticationModule
-          ),
-      },
     ],
   },
 ];
