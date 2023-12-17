@@ -15,11 +15,6 @@ export const navItems: NavItem[] = [
     route: '/regitroVehiculo',
   },
   {
-    displayName: 'Busqueda',
-    iconName: 'layout-dashboard',
-    route: '/filtroRegistro',
-  },
-  {
     displayName: 'Estadistica',
     iconName: 'layout-dashboard',
     route: '/estadisticas',

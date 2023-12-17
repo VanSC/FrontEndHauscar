@@ -5,12 +5,8 @@ import { FullComponent } from './layouts/full/full.component';
 import { AppRegistroComponent } from './pages/app-registro/app-registro.component';
 import { DetalleRegistroComponent } from './pages/detalle-registro/detalle-registro.component';
 import { ReporteRegistroComponent } from './pages/reporte-registro/reporte-registro.component';
-import { FiltroRegistroComponent } from './pages/filtro-registro/filtro-registro.component';
 import { FacturaRegistroComponent } from './pages/factura-registro/factura-registro.component';
 import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estadistica-registro.component';
-import { LineChartComponent } from './pages/graficos/line-chart/line-chart.component';
-import { BarChartComponent } from './pages/graficos/bar-chart/bar-chart.component';
-import { PieChartComponent } from './pages/graficos/pie-chart/pie-chart.component';
 
 const routes: Routes = [
   {
@@ -47,9 +43,6 @@ const routes: Routes = [
       },
       {
         path: "reporteRegistro", component: ReporteRegistroComponent
-      },
-      {
-        path: "filtroRegistro", component: FiltroRegistroComponent
       },
       {
         path: "facturaRegistro", component: FacturaRegistroComponent

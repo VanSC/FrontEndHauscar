@@ -25,7 +25,6 @@ import { AppNavItemComponent } from './layouts/full/sidebar/nav-item/nav-item.co
 import { AppRegistroComponent } from './pages/app-registro/app-registro.component';
 import { DetalleRegistroComponent } from './pages/detalle-registro/detalle-registro.component';
 import { ReporteRegistroComponent } from './pages/reporte-registro/reporte-registro.component';
-import { FiltroRegistroComponent } from './pages/filtro-registro/filtro-registro.component';
 import { FacturaRegistroComponent } from './pages/factura-registro/factura-registro.component';
 import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estadistica-registro.component';
 import { LineChartComponent } from './pages/graficos/line-chart/line-chart.component';
@@ -44,7 +43,6 @@ import { PieChartComponent } from './pages/graficos/pie-chart/pie-chart.componen
     AppRegistroComponent,
     DetalleRegistroComponent,
     ReporteRegistroComponent,
-    FiltroRegistroComponent,
     FacturaRegistroComponent,
     EstadisticaRegistroComponent,
     LineChartComponent,
