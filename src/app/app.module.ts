@@ -30,7 +30,6 @@ import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estad
 import { LineChartComponent } from './pages/graficos/line-chart/line-chart.component';
 import { BarChartComponent } from './pages/graficos/bar-chart/bar-chart.component';
 import { PieChartComponent } from './pages/graficos/pie-chart/pie-chart.component';
-import { AuthenticationModule } from './pages/authentication/authentication.module';
 
 @NgModule({
   declarations: [
@@ -60,7 +59,7 @@ import { AuthenticationModule } from './pages/authentication/authentication.modu
     ReactiveFormsModule,
     MaterialModule,
     TablerIconsModule.pick(TablerIcons),
-    AuthenticationModule
+    
     
   ],
   exports: [TablerIconsModule],

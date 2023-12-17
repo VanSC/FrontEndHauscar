@@ -10,11 +10,11 @@ import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estad
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: '',
     component: BlankComponent,
     children: [
       {
-        path: 'authentication',
+        path: '',
         loadChildren: () =>
           import('./pages/authentication/authentication.module').then(
             (m) => m.AuthenticationModule
@@ -26,11 +26,6 @@ const routes: Routes = [
     path: 'page',
     component: FullComponent,
     children: [
-      // {
-      //   path: '',
-      //   redirectTo: '/dashboard',
-      //   pathMatch: 'full',
-      // },
       {
         path: 'dashboard',
         loadChildren: () =>

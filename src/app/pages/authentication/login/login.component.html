@@ -16,18 +16,18 @@
           </style>
           <div class="or-border m-t-30">INICIO SESION</div>
 
-          <form class="m-t-30">
+          <form [formGroup]="loginForm" (ngSubmit)="loginUser()" class="m-t-30" >
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">DNI</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput />
+              <input matInput formControlName="dni" id="dni"/>
             </mat-form-field>
             <!-- password -->
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput type="password" />
+              <input matInput type="password" formControlName="contraseña" id="contraseña" />
             </mat-form-field>
 
-            <button [routerLink]="['/']" mat-flat-button color="primary" class="w-100">
+            <button mat-flat-button color="primary" class="w-100" type="submit">
               Ingresar
             </button>
             <!-- input -->
