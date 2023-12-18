@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
           height: 100%;
         }
       </style>
-      <a href="/">
+      <a href="/page/dashboard">
         <img
           src="./assets/images/logos/logo.png"
           class="align-middle m-2"

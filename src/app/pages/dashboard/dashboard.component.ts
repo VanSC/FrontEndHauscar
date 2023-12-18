@@ -1,4 +1,7 @@
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import {
   ApexChart,
   ChartComponent,
@@ -65,6 +68,7 @@ export interface RegistroVehiculos {
   horaRegistro: string;
 }
 
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-dashboard',
@@ -73,7 +77,7 @@ export interface RegistroVehiculos {
 })
 export class AppDashboardComponent {
 
-  
+
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
 
   public yearlyChart!: Partial<yearlyChart> | any;
@@ -81,8 +85,7 @@ export class AppDashboardComponent {
   displayedColumns: string[] = ['placa', 'carga', 'tipo', 'precio', 'hora', 'fecha'];
   dataSource: RegistroVehiculos[] = [];
 
-  constructor(private registroService: RegistrovehiculoService) 
-  {
+  constructor(private registroService: RegistrovehiculoService) {
 
     // yearly breakup chart
     this.yearlyChart = {
@@ -133,16 +136,30 @@ export class AppDashboardComponent {
     };
   }
 
+  tiposVehiculos: any[] = [];
+
   ngOnInit(): void {
     this.cargarDatosRegistros();
+    this.cargarTiposVehiculos();
+  }
+
+  cargarTiposVehiculos() {
+    this.registroService.getTiposVehiculos().subscribe(
+      (tipos: any[]) => {
+        console.log(tipos);
+        this.tiposVehiculos = tipos;
+      },
+      error => {
+        console.error('Error al obtener tipos de vehículos:', error);
+      }
+    );
   }
 
   cargarDatosRegistros() {
     // Llamada al servicio para obtener datos
-    this.registroService.getRegistrosVehiculos().subscribe(
+    this.registroService.getListaporfecha().subscribe(
       (registros: RegistroVehiculos[]) => {
         console.log(registros);
-        // Mapear los datos al formato que necesita tu tabla
         this.dataSource = registros.map(registro => ({
           placa: registro.placa,
           tipoVehiculo: registro.tipoVehiculo,
@@ -157,6 +174,33 @@ export class AppDashboardComponent {
       }
     );
   }
+
+  filtro = {
+    precio: '',
+    fecha: '',
+    hora: '',
+    idTipoVehiculo: '',
+  };
+
+  filtrarRegistros(formulario: NgForm) {
+    const valores = formulario.value;
+    console.log(valores)
+    this.registroService.filtrarRegistros(valores).subscribe(
+      (registros: RegistroVehiculos[]) => {
+        this.dataSource = registros.map((registro) => ({
+          placa: registro.placa,
+          tipoVehiculo: registro.tipoVehiculo,
+          precio: registro.precio.toString(),
+          cargaUtil: registro.cargaUtil.toString(),
+          fechaRegistro: this.formatoFecha(registro.fechaRegistro),
+          horaRegistro: this.formatoHora(registro.horaRegistro),
+        }));
+      },
+      (error) => {
+        console.error('Error al filtrar registros:', error);
+      }
+    );
+  }
   formatoFecha(fecha: string): string {
     const fechaObj = new Date(fecha);
     const fechaFormateada = fechaObj.toLocaleDateString();
@@ -166,5 +210,35 @@ export class AppDashboardComponent {
     const horaObj = new Date(`2000-01-01T${hora}`);
     const horaFormateada = horaObj.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
     return horaFormateada;
+  }
+
+  generarInformePDF() {
+    const data = this.dataSource.map(registro => [
+      registro.placa,
+      registro.tipoVehiculo,
+      registro.precio,
+      registro.cargaUtil,
+      registro.fechaRegistro,
+      registro.horaRegistro
+    ]);
+
+    const headers = ['Placa', 'Tipo de Vehículo', 'Precio', 'Carga Útil', 'Fecha de Registro', 'Hora de Registro'];
+
+    const docDefinition = {
+      content: [
+        { text: 'Informe de Registros', style: 'header' },
+        { text: new Date().toLocaleString(), alignment: 'right' },
+        { table: { headerRows: 1, body: [headers, ...data] } }
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 10]
+        }
+      }
+    };
+
+    pdfMake.createPdf(docDefinition).download('Informe_Registros.pdf');
   }
 }
