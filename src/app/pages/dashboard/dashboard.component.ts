@@ -20,6 +20,7 @@ import {
 } from 'ng-apexcharts';
 
 import { RegistrovehiculoService } from 'src/app/services/registrovehiculo.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 export interface salesOverviewChart {
@@ -79,6 +80,7 @@ export class AppDashboardComponent {
 
 
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public yearlyChart!: Partial<yearlyChart> | any;
 
@@ -155,8 +157,7 @@ export class AppDashboardComponent {
     );
   }
 
-  cargarDatosRegistros() {
-    // Llamada al servicio para obtener datos
+  cargarDatosRegistros() {    
     this.registroService.getListaporfecha().subscribe(
       (registros: RegistroVehiculos[]) => {
         console.log(registros);

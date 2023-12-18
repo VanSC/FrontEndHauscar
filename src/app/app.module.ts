@@ -30,6 +30,7 @@ import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estad
 import { LineChartComponent } from './pages/graficos/line-chart/line-chart.component';
 import { BarChartComponent } from './pages/graficos/bar-chart/bar-chart.component';
 import { PieChartComponent } from './pages/graficos/pie-chart/pie-chart.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { PieChartComponent } from './pages/graficos/pie-chart/pie-chart.componen
     ReactiveFormsModule,
     MaterialModule,
     TablerIconsModule.pick(TablerIcons),
+    MatPaginatorModule
     
     
   ],
