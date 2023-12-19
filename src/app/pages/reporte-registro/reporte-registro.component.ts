@@ -1,4 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ImagenService } from 'src/app/services/image-service.service';
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+
 import {
   ApexChart,
   ChartComponent,
@@ -79,7 +85,7 @@ export class ReporteRegistroComponent {
   displayedColumns: string[] = ['placa', 'carga', 'tipo', 'precio', 'hora', 'fecha'];
   dataSource: RegistroVehiculos[] = [];
 
-  constructor(private registroService: RegistrovehiculoService) {
+  constructor(private registroService: RegistrovehiculoService, private imagenService: ImagenService) {
 
     // yearly breakup chart
     this.yearlyChart = {
@@ -130,10 +136,50 @@ export class ReporteRegistroComponent {
     };
   }
 
+  tiposVehiculos: any[] = [];
+
   ngOnInit(): void {
     this.cargarDatosRegistros();
+    this.cargarTiposVehiculos();
   }
 
+  filtro = {
+    precio: '',
+    fecha: '',
+    hora: '',
+    idTipoVehiculo: '',
+  };
+
+  cargarTiposVehiculos() {
+    this.registroService.getTiposVehiculos().subscribe(
+      (tipos: any[]) => {
+        console.log(tipos);
+        this.tiposVehiculos = tipos;
+      },
+      error => {
+        console.error('Error al obtener tipos de vehículos:', error);
+      }
+    );
+  }
+  filtrarRegistros(formulario: NgForm) {
+    const valores = formulario.value;
+    console.log(valores)
+    this.registroService.filtrarRegistros(valores).subscribe(
+      (registros: RegistroVehiculos[]) => {
+        this.dataSource = registros.map((registro) => ({
+          placa: registro.placa,
+          tipoVehiculo: registro.tipoVehiculo,
+          precio: registro.precio.toString(),
+          cargaUtil: registro.cargaUtil.toString(),
+          fechaRegistro: this.formatoFecha(registro.fechaRegistro),
+          horaRegistro: this.formatoHora(registro.horaRegistro),
+        }));
+      },
+      (error) => {
+        console.error('Error al filtrar registros:', error);
+      }
+    );
+  }
   cargarDatosRegistros() {
     // Llamada al servicio para obtener datos
     this.registroService.getRegistrosVehiculos().subscribe(
@@ -163,5 +209,75 @@ export class ReporteRegistroComponent {
     const horaObj = new Date(`2000-01-01T${hora}`);
     const horaFormateada = horaObj.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
     return horaFormateada;
+  }
+
+  async generarInformePDF() {
+    const logoDataUrl = await this.imagenService.cargarImagenComoDataUrl('assets/images/logos/logo.png');
+
+    const content = [
+      {
+        alignment: 'center',
+        text: 'Informe Diario',
+        style: 'header'
+      },
+      { image: logoDataUrl, width: 100, height: 50 },
+      { text: 'Fecha: ' + new Date().toLocaleDateString(), style: 'fecha' },
+      {
+        table: {
+          headerRows: 1,
+          widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'], // Ancho automático para cada columna
+          body: [
+            [
+              { text: 'Placa', style: 'tableHeader' },
+              { text: 'Tipo de Vehículo', style: 'tableHeader' },
+              { text: 'Precio', style: 'tableHeader' },
+              { text: 'Carga Útil', style: 'tableHeader' },
+              { text: 'Fecha de Registro', style: 'tableHeader' },
+              { text: 'Hora de Registro', style: 'tableHeader' },
+            ],
+            // Filas de datos reales obtenidos del servicio
+            ...this.dataSource.map(registro => [
+              registro.placa,
+              registro.tipoVehiculo,
+              registro.precio,
+              registro.cargaUtil,
+              registro.fechaRegistro,
+              registro.horaRegistro
+            ]),
+          ],
+        },
+        style: 'tableStyle',
+      },
+    ];
+
+    const styles = {
+      header: {
+        fontSize: 18,
+        bold: true,
+        margin: [0, 0, 0, 10],
+      },
+      fecha: {
+        fontSize: 10,
+        margin: [0, 0, 0, 10],
+      },
+      tableStyle: {
+        margin: [0, 5, 0, 15],
+      },
+      tableHeader: {
+        fontSize: 12,
+        bold: true,
+        color: 'white',
+        fillColor: '#1E3163',
+        alignment: 'center',
+        margin: [0, 5, 0, 5],
+      },
+    };
+
+    const documentDefinition = {
+      content,
+      styles,
+    };
+
+    pdfMake.createPdf(documentDefinition).download('informe_diario.pdf');
   }
 }

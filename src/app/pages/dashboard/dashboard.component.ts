@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ImagenService } from 'src/app/services/image-service.service';
 import {
   ApexChart,
   ChartComponent,
@@ -87,7 +88,7 @@ export class AppDashboardComponent {
   displayedColumns: string[] = ['placa', 'carga', 'tipo', 'precio', 'hora', 'fecha'];
   dataSource: RegistroVehiculos[] = [];
 
-  constructor(private registroService: RegistrovehiculoService) {
+  constructor(private registroService: RegistrovehiculoService, private imagenService: ImagenService) {
 
     // yearly breakup chart
     this.yearlyChart = {
@@ -139,12 +140,49 @@ export class AppDashboardComponent {
   }
 
   tiposVehiculos: any[] = [];
+  resultadoSuma: any;
+  resultadoSemana: any;
+  resultadoMes: any;
 
   ngOnInit(): void {
     this.cargarDatosRegistros();
     this.cargarTiposVehiculos();
+    this.sumarPorFecha();
+    this.sumarPorSemana();
+    this.sumarPorMes();
+
   }
 
+  sumarPorFecha() {
+    this.registroService.sumarIngresosPorFecha().subscribe(
+      (resultado) => {
+        this.resultadoSuma = resultado[0];
+      },
+      (error) => {
+        console.error('Error al obtener la suma por fecha:', error);
+      }
+    );
+  }
+  sumarPorSemana() {
+    this.registroService.contarRegistrosPorSemana().subscribe(
+      (resultado) => {
+        this.resultadoSemana = resultado[0];
+      },
+      (error) => {
+        console.error('Error al obtener la suma por fecha:', error);
+      }
+    );
+  }
+  sumarPorMes() {
+    this.registroService.contarRegistrosPorMes().subscribe(
+      (resultado) => {
+        this.resultadoMes = resultado[0];
+      },
+      (error) => {
+        console.error('Error al obtener la suma por fecha:', error);
+      }
+    );
+  }
   cargarTiposVehiculos() {
     this.registroService.getTiposVehiculos().subscribe(
       (tipos: any[]) => {
@@ -211,35 +249,5 @@ export class AppDashboardComponent {
     const horaObj = new Date(`2000-01-01T${hora}`);
     const horaFormateada = horaObj.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
     return horaFormateada;
-  }
-
-  generarInformePDF() {
-    const data = this.dataSource.map(registro => [
-      registro.placa,
-      registro.tipoVehiculo,
-      registro.precio,
-      registro.cargaUtil,
-      registro.fechaRegistro,
-      registro.horaRegistro
-    ]);
-
-    const headers = ['Placa', 'Tipo de Vehículo', 'Precio', 'Carga Útil', 'Fecha de Registro', 'Hora de Registro'];
-
-    const docDefinition = {
-      content: [
-        { text: 'Informe de Registros', style: 'header' },
-        { text: new Date().toLocaleString(), alignment: 'right' },
-        { table: { headerRows: 1, body: [headers, ...data] } }
-      ],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true,
-          margin: [0, 0, 0, 10]
-        }
-      }
-    };
-
-    pdfMake.createPdf(docDefinition).download('Informe_Registros.pdf');
   }
 }

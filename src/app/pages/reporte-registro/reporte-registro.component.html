@@ -8,34 +8,105 @@
                 <mat-card class="b-0 shadow-none">
                     <mat-card-content class="b-t-0">
                         <mat-list>
-                            <div mat-subheader class="mat-body-2 m-b-16 f-w-600">Filtros</div>
-                            <hr><br>
-                            <div class="inputs-container">
-                                <div class="input-wrapper">
-                                    <label for="precio">Precio</label>
-                                    <input type="text" name="precio" class="styled-input" placeholder="Precio">
-                                </div>
+                            <style>
+                                .inputs-container {
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: flex-end;
+                                }
 
-                                <div class="input-wrapper">
-                                    <label for="fecha">Fecha</label>
-                                    <input type="date" name="fecha" class="styled-input" placeholder="Fecha">
-                                </div>
+                                .input-wrapper {
+                                    text-align: center;
+                                }
 
-                                <div class="input-wrapper">
-                                    <label for="hora">Hora</label>
-                                    <input type="time" name="hora" class="styled-input" placeholder="Hora">
-                                </div>
+                                label {
+                                    display: block;
+                                    margin-bottom: 5px;
+                                }
 
-                                <div class="input-wrapper">
-                                    <label for="tipoDeVehiculo">Tipo de Vehículo</label>
-                                    <select name="tipoDeVehiculo" class="styled-input">
-                                        <option value="" disabled selected>Tipo de Vehículo</option>
-                                        <!-- Agrega opciones según tus necesidades -->
+                                .styled-input {
+                                    border: 1px solid #ddd;
+                                    border-radius: 10px;
+                                    padding: 8px;
+                                    margin-right: 10px;
+                                    width: 150px;
+                                }
+
+                                .styled-button {
+                                    border: 1px solid #ddd;
+                                    border-radius: 10px;
+                                    padding: 8px;
+                                    background-color: #3498db;
+                                    color: #fff;
+                                    cursor: pointer;
+                                    transition: background-color 0.3s;
+                                }
+
+                                .styled-button:hover {
+                                    background-color: #2980b9;
+                                }
+
+                                .inputs-container {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    gap: 15px;
+                                }
+
+                                .input-wrapper {
+                                    flex: 1 1 100%;
+                                    max-width: calc(25% - 15px);
+                                }
+
+                                @media screen and (max-width: 768px) {
+                                    .input-wrapper {
+                                        flex: 1 1 100%;
+                                        max-width: 100%;
+                                    }
+                                }
+                            </style>
+                            <form (ngSubmit)="filtrarRegistros(filtroForm)" #filtroForm="ngForm">
+                                <div class="inputs-container">
+                                    <div class="input-wrapper">
+                                        <label for="precio">Precio</label>
+                                        <input type="text" name="precio" class="styled-input" placeholder="Precio"
+                                            [(ngModel)]="filtro.precio">
+                                    </div>
+                                    <!-- <div class="input-wrapper">
+                                    <label for="tipoDeVehiculo">Precio</label>
+                                    <select name="tipoDeVehiculo" class="styled-input" [(ngModel)]="filtro.tipoVehiculo" (keyup.enter)="filtrarRegistros(filtroForm)">
+                                      <option value="" disabled selected>Selecciona precio</option>
+                                      <option *ngFor="let tipo of tiposVehiculos" [value]="tipo.precio">
+                                        {{ tipo.precio }}
+                                      </option>
                                     </select>
-                                </div>
+                                  </div>  -->
+                                    <div class="input-wrapper">
+                                        <label for="fecha">Fecha</label>
+                                        <input type="date" name="fecha" class="styled-input" placeholder="Fecha"
+                                            [(ngModel)]="filtro.fecha">
+                                    </div>
 
-                                <button class="styled-button">Buscar</button>
-                            </div><br><hr>
+                                    <div class="input-wrapper">
+                                        <label for="hora">Hora</label>
+                                        <input type="time" name="hora" class="styled-input" placeholder="Hora"
+                                            [(ngModel)]="filtro.hora">
+                                    </div>
+
+                                    <div class="input-wrapper">
+                                        <label for="tipoDeVehiculo">Tipo de Vehículo</label>
+                                        <select name="tipoDeVehiculo" class="styled-input"
+                                            [(ngModel)]="filtro.idTipoVehiculo"
+                                            (keyup.enter)="filtrarRegistros(filtroForm)">
+                                            <option value="" disabled selected>Selecciona un tipo de vehículo</option>
+                                            <option *ngFor="let tipo of tiposVehiculos" [value]="tipo.idTipoVehiculo">
+                                                {{ tipo.tipo }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </form>
+                            <br>
                             <div mat-subheader class="mat-body-2 m-y-16 f-w-600">Datos obtenidos</div>
                             <hr><br>
                             <div class="col-lg-12">
@@ -153,4 +224,6 @@
                                             </table>
                                         </div>
                                     </mat-card-content>
+                                    <button class="styled-button" (click)="generarInformePDF()">Generar Informe
+                                        PDF</button>
                                 </mat-card>

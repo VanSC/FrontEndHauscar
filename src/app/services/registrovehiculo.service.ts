@@ -54,7 +54,13 @@ export class RegistrovehiculoService {
 
   // Método para contar registros por semana
   contarRegistrosPorSemana(): Observable<any> {
-    const url = this.baseUrl + 'contarporsemana';
+    const url = this.baseUrl + 'registrossemanales';
+    return this.http.get(url);
+  }
+
+  // Método para contar registros por mes
+  contarRegistrosPorMes(): Observable<any> {
+    const url = this.baseUrl + 'registrosmensuales';
     return this.http.get(url);
   }
 

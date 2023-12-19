@@ -31,6 +31,7 @@ import { LineChartComponent } from './pages/graficos/line-chart/line-chart.compo
 import { BarChartComponent } from './pages/graficos/bar-chart/bar-chart.component';
 import { PieChartComponent } from './pages/graficos/pie-chart/pie-chart.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AuthGuard } from './services/auth.guard';
 
 @NgModule({
   declarations: [
@@ -66,5 +67,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   ],
   exports: [TablerIconsModule],
   bootstrap: [AppComponent],
+  providers: [AuthGuard],
 })
 export class AppModule {}

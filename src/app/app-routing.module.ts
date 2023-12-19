@@ -7,6 +7,7 @@ import { DetalleRegistroComponent } from './pages/detalle-registro/detalle-regis
 import { ReporteRegistroComponent } from './pages/reporte-registro/reporte-registro.component';
 import { FacturaRegistroComponent } from './pages/factura-registro/factura-registro.component';
 import { EstadisticaRegistroComponent } from './pages/estadistica-registro/estadistica-registro.component';
+import { AuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
   {
     path: 'page',
     component: FullComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'dashboard',

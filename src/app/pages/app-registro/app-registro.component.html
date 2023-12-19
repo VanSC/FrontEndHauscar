@@ -7,12 +7,12 @@
         <form [formGroup]="registroForm" (ngSubmit)="agregarRegistro()" class="m-t-10" enctype="multipart/form-data">
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-16 d-block">Placa del vehículo:</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-                <input matInput id="placa" formControlName="placa" placeholder="AJA-786" />
+                <input matInput id="placa" formControlName="placa" placeholder="AJA-786" required/>
             </mat-form-field>
 
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-16 d-block">Imagen de la carga útil:</mat-label>
             <div class="cloud-upload-container text-center">
-                <input type="file" id="imagenPath" class="cloud-upload-input" formControlName="imagenPath"/>
+                <input type="file" id="imagenPath" class="cloud-upload-input"/>
                 <label for="imagenPath" class="cloud-upload-label">
                     <i class="fas fa-cloud-upload-alt"></i> Subir Imagen
                 </label>
